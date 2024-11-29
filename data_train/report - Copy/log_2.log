@@ -1,0 +1,22 @@
+Class: 2
+
+Confusion Matrix:
+[[ 0  0  0  0  0  0  0  0]
+ [ 0  0  0  0  0  0  0  0]
+ [ 2  0  2  0  0  0  0  0]
+ [ 0  0  0  1  0  0  0  0]
+ [ 2  0  0  0 15  0  0  1]
+ [ 0  0  0  0  0  0  0  0]
+ [ 0  0  0  0  0  0  0  0]
+ [ 0  0  0  0  0  0  0  2]]
+
+Accuracy: 0.5641
+Precision: 0.3646
+Recall: 0.3182
+F1 Score: 0.3062
+time model 1:  906.9095
+time model 2:  551.9621
+time model 3:  558.9326
+time model 4:  2107.7284
+time model 5:  923.6526
+time model all:  5049.4011

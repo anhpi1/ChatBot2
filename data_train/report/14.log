@@ -1,0 +1,12 @@
+time:71.56584620475769
+
+Model:0
+
+Confusion Matrix:
+[[95 10]
+ [11 29]]
+
+Accuracy: 0.8552
+Precision: 0.8199
+Recall: 0.8149
+F1 Score: 0.8173
