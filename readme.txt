@@ -18,6 +18,8 @@ model\du_doan.py
 note: report không bao gồm học tăng cường
 
 cách dùng api
+run model\sever_api.py
+run vi_du_lay_du_doan_tu_api.py trong cửa sổ vs mới
 url: http://127.0.0.1:5000/
 vd dữ liệu gửi cho api
 {
