@@ -150,3 +150,51 @@ def load_model_true_false(name_mode):
     new_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     new_model.load_weights(weight_model.format(name_mode))
     return new_model
+from itertools import combinations
+def replace_positive(numbers):
+    temp=[]
+    # Lấy các chỉ mục của phần tử lớn hơn 0
+    positive_indices = [i for i, num in enumerate(numbers) if num > 0]
+    
+    # Số lượng phần tử lớn hơn 0
+    n = len(positive_indices)
+    
+    # Lặp qua số lượng phần tử thay thế (1 đến n)
+    for k in range(1, n + 1):
+        # Lấy tất cả các tổ hợp của k phần tử lớn hơn 0
+        for positions in combinations(positive_indices, k):
+            # Tạo bản sao của danh sách
+            new_numbers = numbers[:]
+            # Thay thế các vị trí được chọn thành 0
+            for pos in positions:
+                new_numbers[pos] = 0
+            temp.append(new_numbers)
+    return temp
+import pyodbc
+import data.tham_so as ts
+
+def search_with_conditions_sqlserver( data ):
+
+    conn = pyodbc.connect(
+        f"DRIVER={{SQL Server}};SERVER={ts.server};DATABASE={ts.database};UID={ts.username};PWD={ts.password}"
+    )
+    cursor = conn.cursor()
+    
+    # Tạo truy vấn SQL để chỉ lấy cột `content`
+    query = "SELECT content FROM answer WHERE {}_id = {} and {}_id = {} and {}_id = {} and {}_id = {} and {}_id = {} and {}_id = {} and {}_id = {} and {}_id = {} and {}_id = {};".format(ts.tables[0],data[0],ts.tables[1],data[1],ts.tables[2],data[2],ts.tables[3],data[3],ts.tables[4],data[4],ts.tables[5],data[5],ts.tables[6],data[6],ts.tables[7],data[7],ts.tables[8],data[8])
+    
+    try:
+        # Thực thi truy vấn
+        cursor.execute(query)
+        results = cursor.fetchall()
+        # Chỉ lấy giá trị của cột `content`
+        content_results = [row[0] for row in results]
+    except Exception as e:
+        print(f"Lỗi khi thực thi truy vấn: {e}")
+        content_results = []
+    finally:
+        # Đóng kết nối
+        conn.close()
+    
+    return content_results
+#print(search_with_conditions_sqlserver( [11, 0, 12, 0, 0, 0, 0, 0, 0] ))

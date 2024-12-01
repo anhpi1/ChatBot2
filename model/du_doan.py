@@ -121,7 +121,19 @@ def final_du_doan(question,models,true_answer=None):
     model_du_doan,temp=du_doan(question,models)
     if true_answer is not None:
         repair_train(question,model_du_doan,temp,true_answer)
-    return str(model_du_doan)
+    answer=sp.replace_positive(model_du_doan)
+    print("ans:{}".format(answer))
+    final_answer=[]
+    con=sp.search_with_conditions_sqlserver(model_du_doan)
+    if con != []:
+        final_answer.append(con)
+    for row in answer:
+        con=sp.search_with_conditions_sqlserver(row)
+        if con != []:
+            final_answer.append(con)
+            
+    return final_answer
+
 
 
 
@@ -131,5 +143,5 @@ def final_du_doan(question,models,true_answer=None):
 #     models.append(new_model)
 
 # creater_report(models)
-# print(final_du_doan("what is comparator",models))
+#print(len(final_du_doan("what is comparator",models)))
 #creater_report(models)
