@@ -1,0 +1,467 @@
+[
+    {
+        "table": "simulation",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "in simulation"
+            }
+        ]
+    },
+    {
+        "table": "techniques",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "feedback"
+            },
+            {
+                "id": 2,
+                "content": "compensate"
+            }
+        ]
+    },
+    {
+        "table": "comparison",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "dynamic comparator and static comparator"
+            },
+            {
+                "id": 2,
+                "content": "comparator and operational amplifier"
+            },
+            {
+                "id": 3,
+                "content": "open-loop comparator and regenerative feedback comparator"
+            },
+            {
+                "id": 4,
+                "content": "non-inverting and inverting inputs of a comparator"
+            },
+            {
+                "id": 5,
+                "content": "two stage comparator and regenerative feedback comparator"
+            },
+            {
+                "id": 6,
+                "content": "ideal model and actual mode"
+            },
+            {
+                "id": 7,
+                "content": "noise affect output"
+            },
+            {
+                "id": 8,
+                "content": "gain affect resolution"
+            }
+        ]
+    },
+    {
+        "table": "applications",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "ADC"
+            },
+            {
+                "id": 2,
+                "content": "zero-crossing detector"
+            },
+            {
+                "id": 3,
+                "content": "detect over-threshold signals"
+            },
+            {
+                "id": 4,
+                "content": "temperature sensing"
+            }
+        ]
+    },
+    {
+        "table": "operation",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "noisy environment"
+            },
+            {
+                "id": 2,
+                "content": "slowly changing input signal"
+            },
+            {
+                "id": 3,
+                "content": "rapid changes"
+            },
+            {
+                "id": 4,
+                "content": "input shorted"
+            }
+        ]
+    },
+    {
+        "table": "components",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "Mosfet1"
+            },
+            {
+                "id": 2,
+                "content": "Mosfet2"
+            },
+            {
+                "id": 3,
+                "content": "Mosfet3"
+            },
+            {
+                "id": 4,
+                "content": "Mosfet4"
+            },
+            {
+                "id": 5,
+                "content": "Mosfet5"
+            },
+            {
+                "id": 6,
+                "content": "Mosfet6"
+            },
+            {
+                "id": 7,
+                "content": "Mosfet7"
+            },
+            {
+                "id": 8,
+                "content": "Mosfet1,2"
+            },
+            {
+                "id": 9,
+                "content": "Mosfet3,4"
+            },
+            {
+                "id": 10,
+                "content": "mosfet"
+            },
+            {
+                "id": 11,
+                "content": "input"
+            },
+            {
+                "id": 12,
+                "content": "output"
+            },
+            {
+                "id": 13,
+                "content": "current I5"
+            },
+            {
+                "id": 14,
+                "content": "current I7"
+            }
+        ]
+    },
+    {
+        "table": "structure",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "inverting comparator"
+            },
+            {
+                "id": 2,
+                "content": "non inverting comparator"
+            },
+            {
+                "id": 3,
+                "content": "two stage"
+            },
+            {
+                "id": 4,
+                "content": "static comparator"
+            },
+            {
+                "id": 5,
+                "content": "dynamic comparator"
+            },
+            {
+                "id": 6,
+                "content": "push pull comparator"
+            },
+            {
+                "id": 7,
+                "content": "Comparators That Can Drive Large Capacitive Loads"
+            },
+            {
+                "id": 8,
+                "content": "regenerative comparator"
+            },
+            {
+                "id": 9,
+                "content": "strongARM comparator"
+            },
+            {
+                "id": 10,
+                "content": "hysteresis comparator"
+            },
+            {
+                "id": 11,
+                "content": "high speed comparator"
+            },
+            {
+                "id": 12,
+                "content": "comparator "
+            }
+        ]
+    },
+    {
+        "table": "parameter",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "static parameter"
+            },
+            {
+                "id": 2,
+                "content": "dynamic parameter"
+            },
+            {
+                "id": 3,
+                "content": "gain"
+            },
+            {
+                "id": 4,
+                "content": "gain bandwith (GBW)"
+            },
+            {
+                "id": 5,
+                "content": "bandwith (BW)"
+            },
+            {
+                "id": 6,
+                "content": "resolution"
+            },
+            {
+                "id": 7,
+                "content": "noise"
+            },
+            {
+                "id": 8,
+                "content": "kick back noise"
+            },
+            {
+                "id": 9,
+                "content": "input refered noise"
+            },
+            {
+                "id": 10,
+                "content": "input impedance"
+            },
+            {
+                "id": 11,
+                "content": "output impedance"
+            },
+            {
+                "id": 12,
+                "content": "slew rate"
+            },
+            {
+                "id": 13,
+                "content": "VOH"
+            },
+            {
+                "id": 14,
+                "content": "VOL"
+            },
+            {
+                "id": 15,
+                "content": "VIH"
+            },
+            {
+                "id": 16,
+                "content": "VIL"
+            },
+            {
+                "id": 17,
+                "content": "voltage offset"
+            },
+            {
+                "id": 18,
+                "content": "power consumption"
+            },
+            {
+                "id": 19,
+                "content": "rise time"
+            },
+            {
+                "id": 20,
+                "content": "fall time"
+            },
+            {
+                "id": 21,
+                "content": "input common mode rate (ICMR)"
+            },
+            {
+                "id": 22,
+                "content": "power supply rejection ratio (PSSR)"
+            },
+            {
+                "id": 23,
+                "content": "propagation delay"
+            },
+            {
+                "id": 24,
+                "content": "speed"
+            },
+            {
+                "id": 25,
+                "content": "switching delay"
+            },
+            {
+                "id": 26,
+                "content": "common mode refection ratio (CMMR)"
+            },
+            {
+                "id": 27,
+                "content": "basic parameter"
+            },
+            {
+                "id": 28,
+                "content": "Frequency response"
+            },
+            {
+                "id": 29,
+                "content": "First pole"
+            },
+            {
+                "id": 30,
+                "content": "second pole"
+            },
+            {
+                "id": 31,
+                "content": "pole"
+            },
+            {
+                "id": 32,
+                "content": "hysteresis"
+            },
+            {
+                "id": 33,
+                "content": "linear resistance"
+            },
+            {
+                "id": 34,
+                "content": "symbol"
+            }
+        ]
+    },
+    {
+        "table": "intent",
+        "data": [
+            {
+                "id": 0,
+                "content": null
+            },
+            {
+                "id": 1,
+                "content": "definition"
+            },
+            {
+                "id": 2,
+                "content": "determine"
+            },
+            {
+                "id": 3,
+                "content": "different between two concept"
+            },
+            {
+                "id": 4,
+                "content": "formula"
+            },
+            {
+                "id": 5,
+                "content": "advantages"
+            },
+            {
+                "id": 6,
+                "content": "disadvantages"
+            },
+            {
+                "id": 7,
+                "content": "improve"
+            },
+            {
+                "id": 8,
+                "content": "affect between two concept"
+            },
+            {
+                "id": 9,
+                "content": "how circuit operation"
+            },
+            {
+                "id": 10,
+                "content": "sizing"
+            },
+            {
+                "id": 11,
+                "content": "application"
+            },
+            {
+                "id": 12,
+                "content": "description"
+            },
+            {
+                "id": 13,
+                "content": "layout"
+            },
+            {
+                "id": 14,
+                "content": "understand of comparator structure"
+            },
+            {
+                "id": 15,
+                "content": "design techniques"
+            },
+            {
+                "id": 16,
+                "content": "quantity"
+            },
+            {
+                "id": 17,
+                "content": "resource, textbook"
+            }
+        ]
+    }
+]
