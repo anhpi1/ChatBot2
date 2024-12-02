@@ -169,4 +169,8 @@ def creater_random_3_question(no_include_labe):
 # print(len(question))
 # print(len(true_label))
 #print((search_id_lable(table_name="intent",content="definition")))
-#print(len(search_name_lable(table_name="all")))
+# import data.tham_so as ts 
+# for row in ts.tables:
+#     for i in range(5):
+#         print(len(search_name_lable(table_name=row)))
+
