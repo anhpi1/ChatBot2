@@ -126,22 +126,22 @@ def final_du_doan(question,models,true_answer=None):
     final_answer=[]
     con=sp.search_with_conditions_sqlserver(model_du_doan)
     if con != []:
-        final_answer.append(con)
+        final_answer.append(con[0])
     for row in answer:
         con=sp.search_with_conditions_sqlserver(row)
         if con != []:
-            final_answer.append(con)
+            final_answer.append(con[0])
             
     return final_answer
 
 
 
 
-# models=[]
-# for name_mode in tables:
-#     new_model = sp.load_model(name_mode)
-#     models.append(new_model)
+models=[]
+for name_mode in tables:
+    new_model = sp.load_model(name_mode)
+    models.append(new_model)
 
 # creater_report(models)
-#print(len(final_du_doan("what is comparator",models)))
+#print((final_du_doan("What are the static parameters of a comparator circuit?",models)))
 #creater_report(models)
