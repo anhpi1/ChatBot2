@@ -44,7 +44,9 @@ for table in tables:
         # print(" ")
         # print(len(false_question))
         # print(len(false_lable))
+        #if(table=="techniques" and label=="compensate"):
         sp.train_TNN(table+"_"+label,true_question+false_question,true_label+false_lable , (1+1))
+            
 # print(len(data_train_x[1]))
 # print(len(data_train_y[1]))
 #print(data_train_x[0])
