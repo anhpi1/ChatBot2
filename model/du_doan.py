@@ -32,6 +32,7 @@ def du_doan(cau_noi,models):
     for model,name_mode in zip(models, tables):
         du_doan_temp = du_doan_tong(cau_noi,model)
         #print(tkj.search_content_lable(table_name=name_mode, id=du_doan_temp))
+        print(name_mode+"_"+tkj.search_content_lable(table_name=name_mode, id=du_doan_temp)[0])
         is_true_model = sp.load_model_true_false(name_mode+"_"+tkj.search_content_lable(table_name=name_mode, id=du_doan_temp)[0])
         temp.append(du_doan_temp)
         if(du_doan_tong(cau_noi,is_true_model)):
@@ -81,67 +82,135 @@ def creater_report(models):
     for row,row_true,tabel in zip(matrix_du_doan_T,matrix_true_label_T,tables):
         tkj.tao_report(tabel, row,row_true)
 
-def repair_train(incorrect_sentence_padded,false_answer,false_anwer_no_include_true_false,true_answer):
-    for element_false,element_false_non_true_false,element_true, table in zip(false_answer,false_anwer_no_include_true_false,true_answer,tables):
-        #print("/////////////////////////////////")
-        if((element_false_non_true_false!=element_true) and (element_true>0)): 
-            #print(table)                
+
+def repair_train(question_false,false_answer,false_answer_no_include_true_false,true_answer):
+    c=0                                      
+    for dd,nb,t, table in zip(false_answer,false_answer_no_include_true_false,true_answer,tables):
+        if(nb != t):
             model = sp.load_model(table)
-            sp.update_weights_on_incorrect_prediction( model, incorrect_sentence_padded, element_true)
-        if(element_false!=element_true):
-            if (element_true<=0):
-                label=tkj.search_content_lable(table_name=table, id=element_false)[0]
+            print(question_false)
+            print("update parent model{}".format(c)) 
+            c=c+1
+            #print(t)
+            sp.update_weights_on_incorrect_prediction( model, question_false, t)
+            #print(1)
+            model.save_weights(sp.replace_space_with_underscore(weight_model.format(table)))
+            if (dd):
+                print("update chill")
+                label=tkj.search_content_lable(table_name=table, id=nb)[0]
                 new_model_true_false = sp.load_model_true_false(table+"_"+label) 
-                #print(table+"_"+label)  
-                sp.update_weights_on_incorrect_prediction( new_model_true_false, incorrect_sentence_padded, 0)
+                sp.update_weights_on_incorrect_prediction( new_model_true_false, question_false, 0)
+                #print (2)
+                new_model_true_false.save_weights(sp.replace_space_with_underscore(weight_model.format(table+"_"+label)))
+        if(dd!=(t > 0)):
+            print("update chill")
+            if(dd):
+                label=tkj.search_content_lable(table_name=table, id=nb)[0]
+                new_model_true_false = sp.load_model_true_false(table+"_"+label) 
+                sp.update_weights_on_incorrect_prediction( new_model_true_false, question_false, 0)
+                #print (3)
+                new_model_true_false.save_weights(sp.replace_space_with_underscore(weight_model.format(table+"_"+label)))
             else:
-                if(element_false<=0):
-                    label=tkj.search_content_lable(table_name=table, id=element_true)[0]
-                    new_model_true_false = sp.load_model_true_false(table+"_"+label)
-                    
-                    #print(table+"_"+label)  
-                    sp.update_weights_on_incorrect_prediction(new_model_true_false, incorrect_sentence_padded, 1)
-                    for t in tkj.creater_random_3_question(label):
-                        
-                        #print(table+"_"+label)  
-                        sp.update_weights_on_incorrect_prediction( new_model_true_false, t, 0)
-                else:
-                    label=tkj.search_content_lable(table_name=table, id=element_false)[0]
-                    #print(table+"_"+label)  
-                    new_model_false = sp.load_model_true_false(table+"_"+label)
-                    sp.update_weights_on_incorrect_prediction( new_model_false,incorrect_sentence_padded , 0)
-                    label=tkj.search_content_lable(table_name=table, id=element_true)[0]
-                    new_model_true = sp.load_model_true_false(table+"_"+label)
-                    sp.update_weights_on_incorrect_prediction(new_model_true , incorrect_sentence_padded, 1)
-                    for t in tkj.creater_random_3_question(label):
-                        sp.update_weights_on_incorrect_prediction( new_model_true, t, 0)
+                label=tkj.search_content_lable(table_name=table, id=nb)[0]
+                new_model_true_false = sp.load_model_true_false(table+"_"+label) 
+                sp.update_weights_on_incorrect_prediction( new_model_true_false, question_false, 1)
+                for t in tkj.creater_random_3_question(label):
+                    sp.update_weights_on_incorrect_prediction( new_model_true_false, question_false, 0)
+                #print (4)
+                new_model_true_false.save_weights(sp.replace_space_with_underscore(weight_model.format(table+"_"+label)))
+
+ 
 
 
-def final_du_doan(question,models,true_answer=None):
-    model_du_doan,temp=du_doan(question,models)
-    if true_answer is not None:
-        repair_train(question,model_du_doan,temp,true_answer)
-    answer=sp.replace_positive(model_du_doan)
-    print("ans:{}".format(answer))
-    final_answer=[]
-    con=sp.search_with_conditions_sqlserver(model_du_doan)
-    if con != []:
-        final_answer.append(con[0])
-    for row in answer:
-        con=sp.search_with_conditions_sqlserver(row)
-        if con != []:
+class ModelManager:
+    def __init__(self):
+        self.question_last=None
+        self.model_du_doan = None
+        self.model_du_doan_khong_gom_true_false = None
+
+    def final_du_doan(self, question, models, true_answer=None):
+        
+        print("question: {}".format(question))
+        if true_answer is not None:
+            print("du doan    :{}".format(self.model_du_doan))
+            print("true_answer:{}".format(true_answer))
+            #print(self.model_du_doan_khong_gom_true_false)
+            repair_train(self.question_last,self.model_du_doan,self.model_du_doan_khong_gom_true_false,true_answer)
+        
+        self.question_last=question
+        self.model_du_doan, self.model_du_doan_khong_gom_true_false = du_doan(question, models)
+
+        answer = sp.replace_positive(self.model_du_doan)
+        final_answer = []
+
+        # Tìm kiếm trong SQL Server
+        con = sp.search_with_conditions_sqlserver(self.model_du_doan)
+        if con:
             final_answer.append(con[0])
+        for row in answer:
+            con = sp.search_with_conditions_sqlserver(row)
+            if con:
+                final_answer.append(con[0])
+
+        return final_answer
+
+
+
+# model_manager = ModelManager()
+
+# # Tải danh sách các mô hình
+# models = []
+# for name_mode in tables:  # Đảm bảo `tables` đã được định nghĩa
+#     new_model = sp.load_model(name_mode)
+#     models.append(new_model)
+
+# # Thực hiện dự đoán
+# answer = model_manager.final_du_doan("when do we use comparator ?", models)
+# print(answer)
+
+# print("Dự đoán có nhãn đúng:")
+# answer = model_manager.final_du_doan("What are the static parameters of a comparator circuit?", models, [3, 3, 3, 3, 3, 3, 3, 3, 3])
+# print(answer)
+
+def check_model_loading(model_list):
+    from tensorflow.keras.models import load_model
+    failed_models = []
+
+    for model_name in model_list:
+        try:
+            #print(f"Đang kiểm tra model: {model_name}")
+            # Tạo đường dẫn đến trọng số
             
-    return final_answer
+             # Giả sử trọng số lưu trong thư mục "weights"
+            
+            # Khởi tạo mô hình (cần thay thế bằng hàm khởi tạo đúng của bạn)
+            model = sp.load_model_true_false(model_name)  # Thay thế bằng hàm của bạn
+            
+            # Cố gắng tải trọng số
+            
+           
+        except Exception as e:
+            # Nếu lỗi, ghi nhận model vào danh sách lỗi
+            print(f"Lỗi khi tải model {model_name}")
+            failed_models.append((model_name, str(e)))
+
+    return failed_models
+
+#Xây dựng danh sách các mô hình từ tables và labels
+temp1 = []
+for table in tables:
+    #temp1.append(table)
+    labels = tkj.search_name_lable(table_name=table)
+    for label in labels:
+        temp1.append(table + "_" + label)
+
+# Kiểm tra tải các mô hình
+failed_models = check_model_loading(temp1)
+
+# Hiển thị các mô hình không tải được
+print("Các mô hình không tải được:")
+for model, error in failed_models:
+    print(f"- {model}: {error}")
 
 
-
-
-models=[]
-for name_mode in tables:
-    new_model = sp.load_model(name_mode)
-    models.append(new_model)
-
-# creater_report(models)
-#print((final_du_doan("What are the static parameters of a comparator circuit?",models)))
 #creater_report(models)

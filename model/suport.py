@@ -49,8 +49,8 @@ def create_model(number_of_outputs):
     output_layer = Dense(number_of_outputs, activation='softmax')(x)
     return Model(inputs=input_layer, outputs=output_layer)
 
-def train_TNN(name_mode, file_input_train, file_output_train, number_of_outputs):
-
+def train_TNN(k, file_input_train, file_output_train, number_of_outputs):
+    name_mode=replace_space_with_underscore(k)
     input_padded = convert_to_pad(file_input_train)
 
     # Nhãn là mảng số nguyên
@@ -67,7 +67,7 @@ def train_TNN(name_mode, file_input_train, file_output_train, number_of_outputs)
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 
     # Huấn luyện mô hình
-    model.fit(X_train, y_train, epochs=6000, batch_size=4, validation_data=(X_test, y_test), callbacks=[early_stopping], verbose=1)
+    model.fit(X_train, y_train, epochs=6000, batch_size=2, validation_data=(X_test, y_test), callbacks=[early_stopping], verbose=1)
 
     # Dự đoán từ mô hình
     predictions = model.predict(X_test, verbose=0).argmax(axis=1)
@@ -105,6 +105,9 @@ def convert_to_pad(file_input_train):
 
 def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_label):
     # Giả sử `convert_to_pad` là hàm tiền xử lý câu
+    # print("cau:")
+    # print(incorrect_sentence)
+    # print(correct_label)
     incorrect_sentence_padded = convert_to_pad(incorrect_sentence)  
     
     # Bộ tối ưu và hàm mất mát cho bài toán hồi quy (Mean Squared Error)
@@ -116,7 +119,8 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
     patience = 5  # Số lần cho phép mất mát không cải thiện
     wait = 0  # Bộ đếm số lần không cải thiện
     count = 0  # Bộ đếm tổng số lần lặp
-
+    true_loss= 1
+    maxx=6000
     while True:
         with tf.GradientTape() as tape:
             logits = model(incorrect_sentence_padded, training=True)  # Tính toán đầu ra
@@ -126,12 +130,14 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
         optimizer.apply_gradients(zip(grads, model.trainable_weights))  # Cập nhật trọng số
         
         # Kiểm tra nếu mất mát giảm
-        if loss_value < best_loss:
+        if (loss_value < best_loss)or(true_loss <loss_value):
             best_loss = loss_value
             wait = 0  # Reset bộ đếm nếu có sự cải thiện
         else:
             wait += 1  # Tăng bộ đếm nếu không có sự cải thiện
-        
+        if (count>maxx):
+            return  print(f"Đã dừng sau {count} vòng lặp với mất mát tốt nhất: {best_loss:.4f}")
+            break
         count += 1
         
         # Dừng lại nếu không cải thiện sau `patience` lần hoặc đã vượt quá 1000 vòng lặp
@@ -140,14 +146,18 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
             break
 
 import tim_kiem_json as tkj
-def load_model(name_mode):
+def load_model(k):
+    name_mode=replace_space_with_underscore(k)
     new_model = create_model(len(tkj.search_name_lable(table_name=name_mode))+1)
     new_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    #print(name_mode)
     new_model.load_weights(weight_model.format(name_mode))
     return new_model
-def load_model_true_false(name_mode):
+def load_model_true_false(k):
+    name_mode=replace_space_with_underscore(k)
     new_model = create_model(1+1)
     new_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
     new_model.load_weights(weight_model.format(name_mode))
     return new_model
 from itertools import combinations
@@ -198,3 +208,15 @@ def search_with_conditions_sqlserver( data ):
     
     return content_results
 #print(search_with_conditions_sqlserver( [11, 0, 12, 0, 0, 0, 0, 0, 0] ))
+
+def replace_space_with_underscore(input_string):
+    """
+    Chuyển đổi các khoảng trắng trong chuỗi thành dấu gạch dưới (_).
+    
+    Args:
+        input_string (str): Chuỗi đầu vào.
+    
+    Returns:
+        str: Chuỗi đã chuyển đổi.
+    """
+    return input_string.replace(" ", "_")
