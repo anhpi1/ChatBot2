@@ -11,6 +11,8 @@ for name_mode in tables:
     new_model = sp.load_model(name_mode)
     models.append(new_model)
 
+model_manager = dd.ModelManager()
+
 # API trả về dự đoán đầu
 @app.route('/du_doan', methods=['POST'])
 def du_doan():
@@ -41,7 +43,7 @@ def lay_report():
 # API trả về dự đoán có lịch sử
 @app.route('/du_doan_co_lich_su', methods=['POST'])
 def du_doan_co_lich_su():
-    try:
+    #try:
         # Lấy dữ liệu JSON từ yêu cầu POST
         data = request.get_json()
         
@@ -53,11 +55,12 @@ def du_doan_co_lich_su():
         true_label = data['true_label']
         message = data['message']
         
+        answer = model_manager.final_du_doan(message, models,true_label)
         # Trả về chuỗi ký tự nhận được
-        return jsonify({"message": dd.final_du_doan(message, models, true_label)}), 200
+        return jsonify({"message": answer}), 200
     
-    except Exception as e:
-        return jsonify({"message": str(e)}), 500
+    # except Exception as e:
+    #     return jsonify({"message": str(e)}), 500
 
 # Chạy ứng dụng Flask
 if __name__ == '__main__':
