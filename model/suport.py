@@ -91,6 +91,48 @@ def train_TNN(k, file_input_train, file_output_train, number_of_outputs):
     model.save_weights(weight_model.format(name_mode))
     del model
 
+def update_weights_TNN(k, file_input_train, file_output_train, number_of_outputs, model):
+    name_mode = replace_space_with_underscore(k)
+    input_padded = convert_to_pad(file_input_train)
+
+    # Nhãn là mảng số nguyên
+    labels = np.array(file_output_train)
+    
+    # Chia dữ liệu thành tập huấn luyện và kiểm tra
+    X_train, X_test, y_train, y_test = train_test_split(input_padded, labels, test_size=0.2, random_state=42)
+    
+    # Cập nhật trọng số mô hình
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+    # Định nghĩa callback early stopping
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=ts.so_lan_loss_k_thay_doi, restore_best_weights=True)
+
+    # Huấn luyện mô hình với trọng số đã có
+    model.fit(X_train, y_train, epochs=6000, batch_size=ts.so_mau_train, validation_data=(X_test, y_test), callbacks=[early_stopping], verbose=1)
+
+    # Dự đoán từ mô hình
+    predictions = model.predict(X_test, verbose=0).argmax(axis=1)
+
+    # y_test không cần chuyển đổi, nó là nhãn số nguyên rồi
+    accuracy = accuracy_score(y_test, predictions)
+    precision = precision_score(y_test, predictions, average='macro', zero_division=0)
+    recall = recall_score(y_test, predictions, average='macro', zero_division=0)
+    f1 = f1_score(y_test, predictions, average='macro', zero_division=0)
+    conf_matrix = confusion_matrix(y_test, predictions)
+
+    # In kết quả
+    print(f"Model: {name_mode}")
+    print(f"Accuracy: {accuracy:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall: {recall:.4f}")
+    print(f"F1 Score: {f1:.4f}")
+    print("Confusion Matrix:\n", conf_matrix)
+
+    # Lưu trọng số mô hình sau khi cập nhật
+    model.save_weights(weight_model.format(name_mode))
+    del model
+
+
 def convert_to_pad(file_input_train):
     with open(file_word_list, 'r') as json_file:
         word_index = json.load(json_file)
@@ -143,6 +185,61 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
         if wait >= patience :
             print(f"Đã dừng sau {count} vòng lặp với mất mát tốt nhất: {best_loss:.4f}")
             break
+
+def update_weights_on_incorrect_batch(model, incorrect_sentences, correct_labels, 
+                                      patience=10, max_iterations=6000, learning_rate=0.001):
+    """
+    Hàm cập nhật trọng số của mô hình với nhiều câu đầu vào bị dự đoán sai.
+
+    Args:
+        model: Mô hình TensorFlow.
+        incorrect_sentences: Danh sách các câu đầu vào bị dự đoán sai.
+        correct_labels: Danh sách các nhãn đúng tương ứng với các câu đầu vào.
+        patience: Số lần cho phép mất mát không cải thiện trước khi dừng.
+        max_iterations: Số vòng lặp tối đa.
+        learning_rate: Tốc độ học của bộ tối ưu.
+
+    Returns:
+        None
+    """
+    # Tiền xử lý: Chuyển tất cả câu thành dạng pad
+    incorrect_sentences_padded = np.array([convert_to_pad(sentence) for sentence in incorrect_sentences])
+    correct_labels = np.array(correct_labels, dtype=np.float32)
+
+    # Cấu hình tối ưu và hàm mất mát
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+    loss_fn = tf.keras.losses.MeanSquaredError()
+
+    # Biến theo dõi
+    best_loss = float('inf')  # Mất mát tốt nhất
+    wait = 0  # Số lần không cải thiện
+    count = 0  # Số vòng lặp
+
+    while count < max_iterations:
+        with tf.GradientTape() as tape:
+            logits = model(incorrect_sentences_padded, training=True)  # Dự đoán cho batch
+            loss_value = loss_fn(correct_labels, logits)  # Tính mất mát cho batch
+
+        # Cập nhật trọng số
+        grads = tape.gradient(loss_value, model.trainable_weights)
+        optimizer.apply_gradients(zip(grads, model.trainable_weights))
+
+        # Cập nhật theo dõi mất mát
+        if loss_value < best_loss:
+            best_loss = loss_value
+            wait = 0  # Đặt lại bộ đếm nếu cải thiện
+        else:
+            wait += 1  # Tăng nếu không cải thiện
+
+        # Kiểm tra điều kiện dừng sớm
+        if wait >= patience:
+            print(f"Dừng sau {count} vòng lặp với mất mát tốt nhất: {best_loss:.4f}")
+            break
+
+        count += 1
+
+    print(f"Đã kết thúc sau {count} vòng lặp với mất mát tốt nhất: {best_loss:.4f}")
+
 
 import tim_kiem_json as tkj
 def load_model(k):
