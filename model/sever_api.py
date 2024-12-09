@@ -26,9 +26,9 @@ def du_doan():
         
         # Lấy chuỗi ký tự
         message = data['message']
-        
+        answer = model_manager.final_du_doan(message, models)
         # Trả về chuỗi ký tự nhận được
-        return jsonify({"message": dd.final_du_doan(message, models)}), 200
+        return jsonify({"message": answer}), 200
     
     except Exception as e:
         return jsonify({"message": str(e)}), 500
@@ -55,7 +55,8 @@ def du_doan_co_lich_su():
         true_label = data['true_label']
         message = data['message']
         
-        answer = model_manager.final_du_doan(message, models,true_label)
+        answer = model_manager.final_du_doan(message, models)
+        #answer = model_manager.final_du_doan(message, models,true_label)
         # Trả về chuỗi ký tự nhận được
         return jsonify({"message": answer}), 200
     
