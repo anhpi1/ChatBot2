@@ -1,11 +1,11 @@
 
-Model: simulationAccuracy: 0.4069
-Precision: 0.6273
-Recall: 0.5286
-F1 Score: 0.3437
+Model: simulationAccuracy: 0.8207
+Precision: 0.9051
+Recall: 0.6176
+F1 Score: 0.6381
 Confusion Matrix:
-52 1
-85 7
+111 0
+26 8
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 

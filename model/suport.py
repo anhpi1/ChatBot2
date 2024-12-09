@@ -64,10 +64,10 @@ def train_TNN(k, file_input_train, file_output_train, number_of_outputs):
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Định nghĩa callback early stopping
-    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=ts.so_lan_loss_k_thay_doi, restore_best_weights=True)
 
     # Huấn luyện mô hình
-    model.fit(X_train, y_train, epochs=6000, batch_size=2, validation_data=(X_test, y_test), callbacks=[early_stopping], verbose=1)
+    model.fit(X_train, y_train, epochs=6000, batch_size=ts.so_mau_train, validation_data=(X_test, y_test), callbacks=[early_stopping], verbose=1)
 
     # Dự đoán từ mô hình
     predictions = model.predict(X_test, verbose=0).argmax(axis=1)
@@ -116,10 +116,9 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
     
     correct_label = np.array([correct_label], dtype=np.float32)  # Đảm bảo correct_label là kiểu float
     best_loss = float('inf')  # Giá trị mất mát tốt nhất
-    patience = 5  # Số lần cho phép mất mát không cải thiện
+    patience = ts.so_lan_loss_k_thay_doi  # Số lần cho phép mất mát không cải thiện
     wait = 0  # Bộ đếm số lần không cải thiện
     count = 0  # Bộ đếm tổng số lần lặp
-    true_loss= 1
     maxx=6000
     while True:
         with tf.GradientTape() as tape:
@@ -130,7 +129,7 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
         optimizer.apply_gradients(zip(grads, model.trainable_weights))  # Cập nhật trọng số
         
         # Kiểm tra nếu mất mát giảm
-        if (loss_value < best_loss)or(true_loss <loss_value):
+        if (loss_value < best_loss):
             best_loss = loss_value
             wait = 0  # Reset bộ đếm nếu có sự cải thiện
         else:
@@ -141,7 +140,7 @@ def update_weights_on_incorrect_prediction(model, incorrect_sentence, correct_la
         count += 1
         
         # Dừng lại nếu không cải thiện sau `patience` lần hoặc đã vượt quá 1000 vòng lặp
-        if wait >= patience or count > 1000:
+        if wait >= patience :
             print(f"Đã dừng sau {count} vòng lặp với mất mát tốt nhất: {best_loss:.4f}")
             break
 

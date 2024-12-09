@@ -4,6 +4,7 @@ import json
 
 
 def search_content_lable(table_name=None, id=None):
+    #print("contenlabe: {}_{}".format(table_name,id))
     file_path="model\\data\\json\\data_content_lable.json"
     try:
         # Đọc file JSON
@@ -34,31 +35,23 @@ def search_content_lable(table_name=None, id=None):
 
 def search_id_lable(table_name=None, content=None):
     file_path="model\\data\\json\\data_content_lable.json"
-    try:
-        # Đọc file JSON
-        with open(file_path, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-
-        # Danh sách kết quả trả về
+    # Đọc file JSON
+    with open(file_path, 'r', encoding='utf-8') as file:
+        datas = json.load(file)
         results = []
+        for data in datas:
+            if(content=="all"):
+                for row in data["data"]:
+                    results.append(row["id"])
+            if(data["table"]==table_name):
+                for row in data["data"]:
+                    if(row["content"]==content):
+                        return row["id"]
 
-        # Lọc dữ liệu theo điều kiện
-        for table in data:
-            if table_name and table["table"] != table_name:
-                continue
-
-            for row in table["data"]:
-                if content is not None and row["content"] != content:
-                    continue
-                results.append(row["id"])
-
-        return results[0]
-
-    except FileNotFoundError:
-        return {"error": "File JSON không tồn tại!"}
-    except json.JSONDecodeError:
-        return {"error": "File JSON không hợp lệ!"}
-
+    
+    
+    return results
+#print(search_id_lable("intent", "definition"))
 
 def search_data_question(table_name=None, lable_name =None ):
     file_path="model\\data\\json\\data_train.json"
@@ -97,7 +90,9 @@ def search_data_question(table_name=None, lable_name =None ):
         return {"error": "File JSON không tồn tại!"}
     except json.JSONDecodeError:
         return {"error": "File JSON không hợp lệ!"}
-
+# results,results_true_label=search_data_question("intent","definition")
+# print(results)
+# print(results_true_label)
 def search_name_lable(table_name=None):
     file_path="model\\data\\json\\data_content_lable.json"
     if table_name is None:
@@ -132,8 +127,8 @@ def search_name_lable(table_name=None):
 
 from data.tham_so import report_train
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-def tao_report(name, output_test,predictions):
-    with open(report_train.format(name), "w", encoding="utf-8") as file:
+def tao_report(name, output_test,predictions,name_report):
+    with open(report_train.format(name,name_report), "w", encoding="utf-8") as file:
         accuracy = accuracy_score(output_test, predictions)
         precision = precision_score(output_test, predictions, average='macro',zero_division=0)
         recall = recall_score(output_test, predictions, average='macro',zero_division=0)
@@ -162,6 +157,38 @@ def creater_random_3_question(no_include_labe):
         temp,trash=search_data_question(table_name="all",lable_name =r)
         listt=listt+temp
     return random.sample(listt, 3)
+
+def search_question_and_have_labe(table,label ):
+    question=[]
+    _lable=[]
+    
+    if (table==None or label==None):
+        return
+    if(label =="all"):
+        file_path="model\data\json\data_test.json"
+        with open(file_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+            for row in data:
+                if(row[table]>0):
+                    question.append(row["question"])
+                    _lable.append(row[table])
+        
+        
+        return question,_lable
+    file_path="model\data\json\data_test.json"
+    with open(file_path, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+        for row in data:
+            if(row[table]==label):
+                question.append(row["question"])
+                _lable.append(row[table])
+    # print("1.{}".format(label))
+    # print("2.{}".format(question))
+    # print("3.{}".format(_lable))
+    return question,_lable
+# questionn,_lable=search_question_and_have_labe("intent",11)
+# print(questionn)
+# print(_lable)
 
 #print(creater_random_3_question("definition"))
 #print(search_content_lable(table_name="applications", id=2))
