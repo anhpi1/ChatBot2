@@ -433,3 +433,8 @@ mess: ['The two-stage comparator has an input stage (differential amplifier) and
 question:How to choose current I5 in two stage comparator?
 mess: ['The two-stage comparator has an input stage (differential amplifier) and an output stage, providing stable, precise but slower output. The regenerative feedback comparator uses positive feedback for faster switching, offering quicker transitions with hysteresis for noise rejection, though with less precise transitions.']
 
+question:when do we use comparator ?
+question:when do we use comparator ?
+mess: []
+
+question:what is output of comparator ?

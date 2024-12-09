@@ -33,7 +33,10 @@ def du_doan(cau_noi,models):
         du_doan_temp = du_doan_tong(cau_noi,model)
         #print(tkj.search_content_lable(table_name=name_mode, id=du_doan_temp))
         #print(name_mode+"_"+tkj.search_content_lable(table_name=name_mode, id=du_doan_temp)[0])
-        is_true_model = sp.load_model_true_false(name_mode+"_"+tkj.search_content_lable(table_name=name_mode, id=du_doan_temp)[0])
+        # print(name_mode)
+        # print(du_doan_temp)
+        # print("t:{}".format(tkj.search_content_lable(name_mode, du_doan_temp)[0]))
+        is_true_model = sp.load_model_true_false(name_mode+"_"+tkj.search_content_lable(name_mode, du_doan_temp)[0])
         temp.append(du_doan_temp)
         if(du_doan_tong(cau_noi,is_true_model)):
             #print (du_doan_temp)
@@ -89,19 +92,18 @@ def repair_train(question_false,false_answer,false_answer_no_include_true_false,
     c=0                                  
     for dd,nb,t, table in zip(false_answer,false_answer_no_include_true_false,true_answer,tables):
         
-        ddd=nb==t
-        dnb=dd==(t>0)
+        ddd=(nb==t)
+        dnb=(dd==(t>0))
         dt=(t>0)
+        label=sp.replace_space_with_underscore(tkj.search_content_lable(table_name=table, id=nb)[0])
         if(dnb and (not ddd) and dt):
-            print ("update chill")
-            label=tkj.search_content_lable(table_name=table, id=nb)[0]
             new_model_true_false = sp.load_model_true_false(table+"_"+label) 
             sp.update_weights_on_incorrect_prediction( new_model_true_false, question_false, 1)
             for t in tkj.creater_random_3_question(label):
                 sp.update_weights_on_incorrect_prediction( new_model_true_false, question_false, 0)
             #print (4)
             new_model_true_false.save_weights(sp.replace_space_with_underscore(weight_model.format(table+"_"+label)))
-            del model,new_model_true_false
+            del new_model_true_false
         if((not dnb) and ddd and dt):
             model = sp.load_model(table)
             new_model_true_false = sp.load_model_true_false(table+"_"+label) 
@@ -119,7 +121,7 @@ def repair_train(question_false,false_answer,false_answer_no_include_true_false,
             model = sp.load_model(table)
             sp.update_weights_on_incorrect_prediction( model, question_false, t)
             model.save_weights(sp.replace_space_with_underscore(weight_model.format(table)))
-            del model,new_model_true_false
+            del model
         c=c+1
 
 import data.tham_so as ts
@@ -181,12 +183,12 @@ def check_model_loading(model_list):
             failed_models.append((model_name, str(e)))
 
     return failed_models
-def ghi_cau_tra_loi(i,model_manager):
+def ghi_cau_tra_loi(i,model_manager,true):
 
-    with open('model\data\cau_tra_loi_co_test_khong_true_false.txt','a', encoding='utf-8') as file:
+    with open('model\data\cau_tra_loi.txt','a', encoding='utf-8') as file:
         print(i)
         file.write("question:{}\n".format(i))
-        answer = model_manager.final_du_doan(i, models)
+        answer = model_manager.final_du_doan(i, models,true)
         file.write("mess: {}".format(answer))
         file.write("\n")
         file.write("\n")
@@ -201,7 +203,7 @@ for name_mode in tables:  # Đảm bảo `tables` đã được định nghĩam
     models.append(new_model)
 
 # # Thực hiện dự đoán
-# answer = model_manager.final_du_doan("when do we use comparator ?", models)
+# answer = model_manager.final_du_doan("what is comparator ?", models)
 # print(answer)
 
 # print("Dự đoán có nhãn đúng:")
@@ -226,10 +228,28 @@ for name_mode in tables:  # Đảm bảo `tables` đã được định nghĩam
 #     print(f"- {model}: {error}")
 
 
-creater_report(models,"co_test_khong_true_false")
-
+# creater_report(models,"co_test_khong_true_false")
+temp=None
 with open('model\\data\\json\\data_test.json', 'r', encoding='utf-8') as data_file:
     x =json.load(data_file)
     for row in x:     
-        ghi_cau_tra_loi(row["question"],model_manager)
-        
+        ghi_cau_tra_loi(row["question"],model_manager,temp)
+        temp=[row["intent"],row["parameter"],row["structure"],row["operation"],row["components"],row["applications"],row["comparison"],row["techniques"],row["simulation"]]
+
+
+# sum=0
+# with open('model\\data\\json\\data_test.json', 'r', encoding='utf-8') as data_file:
+#     x =json.load(data_file)
+#     for table in tables:
+#         labels=tkj.search_name_lable(table_name=table)
+#         for label in labels:
+#             c=0
+#             for row in x:
+#                 if(row[table]==tkj.search_id_lable(table_name=table, content=label)):
+#                     c=c+1
+#             sum=sum+c
+#             print("table:{} label:{}".format(table,label))
+#             print("so_nhan:{}".format(c))
+# print(sum)
+            
+

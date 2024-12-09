@@ -8,7 +8,7 @@ def sql():
         f"DRIVER={{SQL Server}};SERVER={ts.server};DATABASE={ts.database};UID={ts.username};PWD={ts.password}"
     )
     cursor = connection.cursor()
-
+    
     # Lấy danh sách các bảng
     cursor.execute("""
         SELECT TABLE_NAME
@@ -46,10 +46,33 @@ def sql():
         })
     with open('model\\data\\json\\data_content_lable.json', 'w', encoding='utf-8') as data_file:
         json.dump(datas, data_file, indent=4, ensure_ascii=False)
+    cursor.execute("""
+        select * from answer
+    """)
+    rows = cursor.fetchall()
+
+    # Lấy tên cột từ cursor.description
+    columns = [column[0] for column in cursor.description]
+
+    # Chuyển đổi dữ liệu thành danh sách các từ điển (mỗi dòng dữ liệu là một dictionary)
+    data = []
+    for row in rows:
+        data.append(dict(zip(columns, row)))
 
     # Đóng kết nối
     cursor.close()
     connection.close()
+
+    # Tạo một đối tượng để ghi vào file JSON
+    output = {
+        "table_name": "answer",  # Tên bảng
+        "data": data  # Dữ liệu
+    }
+
+    # Ghi dữ liệu ra file JSON
+    with open("model\\data\\json\\answer.json", "w", encoding="utf-8") as json_file:
+        json.dump(output, json_file, ensure_ascii=False, indent=4)
+    
 
 # Gọi hàm
 sql()
