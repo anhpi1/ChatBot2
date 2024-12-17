@@ -44,9 +44,21 @@ def create_model(number_of_outputs):
     x = transformer_encoder(embedding_layer, head_size=128, num_heads=4, ff_dim=128, dropout=0.1)
     x = GlobalAveragePooling1D()(x)
     x = Dropout(0.1)(x)
-    x = Dense(64, activation='relu')(x)
+    x = Dense(256, activation='relu')(x)
     x = Dropout(0.1)(x)
     output_layer = Dense(number_of_outputs, activation='softmax')(x)
+    return Model(inputs=input_layer, outputs=output_layer)
+
+def create_modeltf(number_of_outputs):
+    input_layer = Input(shape=(number_of_input,))
+    embedding_layer = Embedding(input_dim=num_words_list, output_dim=128, input_length=number_of_input)(input_layer)
+    x = transformer_encoder(embedding_layer, head_size=128, num_heads=4, ff_dim=128, dropout=0.1)
+    x = GlobalAveragePooling1D()(x)
+    x = Dropout(0.1)(x)
+    x = Dense(128, activation='relu')(x)
+    x = Dropout(0.1)(x)
+    output_layer = Dense(number_of_outputs, activation='softmax')(x)
+
     return Model(inputs=input_layer, outputs=output_layer)
 
 def train_TNN(k, file_input_train, file_output_train, number_of_outputs):
@@ -57,8 +69,12 @@ def train_TNN(k, file_input_train, file_output_train, number_of_outputs):
     labels = np.array(file_output_train)
     
     # Chia dữ liệu thành tập huấn luyện và kiểm tra
-    X_train, X_test, y_train, y_test = train_test_split(input_padded, labels, test_size=0.2, random_state=42)
-    
+    X_train, X_test, y_train, y_test = train_test_split(
+    input_padded, 
+    labels, 
+    test_size=0.2, 
+    shuffle=True,  # Đảm bảo dữ liệu được trộn trước khi chia
+    )
     # Xây dựng mô hình
     model = create_model(number_of_outputs)
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
@@ -90,6 +106,52 @@ def train_TNN(k, file_input_train, file_output_train, number_of_outputs):
     # Lưu trọng số mô hình
     model.save_weights(weight_model.format(name_mode))
     del model
+def train_TNNtf(k, file_input_train, file_output_train, number_of_outputs):
+    name_mode=replace_space_with_underscore(k)
+    input_padded = convert_to_pad(file_input_train)
+
+    # Nhãn là mảng số nguyên
+    labels = np.array(file_output_train)
+    
+    # Chia dữ liệu thành tập huấn luyện và kiểm tra
+    X_train, X_test, y_train, y_test = train_test_split(
+    input_padded, 
+    labels, 
+    test_size=0.2, 
+    shuffle=True,  # Đảm bảo dữ liệu được trộn trước khi chia
+    )
+    
+    # Xây dựng mô hình
+    model = create_modeltf(number_of_outputs)
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+    # Định nghĩa callback early stopping
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=ts.so_lan_loss_k_thay_doi_tf, restore_best_weights=True)
+
+    # Huấn luyện mô hình
+    model.fit(X_train, y_train, epochs=6000, batch_size=ts.so_mau_train_tf, validation_data=(X_test, y_test), callbacks=[early_stopping], verbose=1)
+
+    # Dự đoán từ mô hình
+    predictions = model.predict(X_test, verbose=0).argmax(axis=1)
+
+    # y_test không cần chuyển đổi, nó là nhãn số nguyên rồi
+    accuracy = accuracy_score(y_test, predictions)
+    precision = precision_score(y_test, predictions, average='macro', zero_division=0)
+    recall = recall_score(y_test, predictions, average='macro', zero_division=0)
+    f1 = f1_score(y_test, predictions, average='macro', zero_division=0)
+    conf_matrix = confusion_matrix(y_test, predictions)
+
+    # In kết quả
+    print(f"Model: {name_mode}")
+    print(f"Accuracy: {accuracy:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall: {recall:.4f}")
+    print(f"F1 Score: {f1:.4f}")
+    print("Confusion Matrix:\n", conf_matrix)
+
+    # Lưu trọng số mô hình
+    model.save_weights(weight_model.format(name_mode))
+    del model
 
 def update_weights_TNN(k, file_input_train, file_output_train, number_of_outputs, model):
     name_mode = replace_space_with_underscore(k)
@@ -99,7 +161,7 @@ def update_weights_TNN(k, file_input_train, file_output_train, number_of_outputs
     labels = np.array(file_output_train)
     
     # Chia dữ liệu thành tập huấn luyện và kiểm tra
-    X_train, X_test, y_train, y_test = train_test_split(input_padded, labels, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(input_padded, labels, test_size=0.2)
     
     # Cập nhật trọng số mô hình
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
@@ -251,7 +313,7 @@ def load_model(k):
     return new_model
 def load_model_true_false(k):
     name_mode=replace_space_with_underscore(k)
-    new_model = create_model(1+1)
+    new_model = create_modeltf(1+1)
     new_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     new_model.load_weights(weight_model.format(name_mode))

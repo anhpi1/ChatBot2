@@ -13,5 +13,6 @@
     "input",
     "output",
     "current I5",
-    "current I7"
+    "current I7",
+    "stage"
 ]

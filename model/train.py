@@ -6,21 +6,21 @@ import data.tham_so as ts
 #print(tables)
 data_train_x=[]
 data_train_y=[]
-for table in tables:
-    tempx,tempy=tkj.search_data_question(table_name="{}".format(table), lable_name ="all" )
-    # data_train_x.append(tempx)
-    # data_train_y.append(tempy)
-    questionn,_label=tkj.search_question_and_have_labe(table,"all")
-    if(ts.co_train_du_lieu_test):
-        print("true ////////////////////////////////////////////////?????????????????????????????????????/////////////////////////????????????????????????????????????????")
-        # print(questionn)
-        # print(_label)
-        tempx=tempx+questionn
-        tempy=tempy+_label
-    number_of_outputs=len(tkj.search_name_lable(table_name="{}".format(table)))
-    sp.train_TNN(table,  tempx, tempy, number_of_outputs+1)
-    #print(table)
-    #print(number_of_outputs)
+# for table in tables:
+#     tempx,tempy=tkj.search_data_question(table_name="{}".format(table), lable_name ="all" )
+#     # data_train_x.append(tempx)
+#     # data_train_y.append(tempy)
+#     questionn,_label=tkj.search_question_and_have_labe(table,"all")
+#     if(ts.co_train_du_lieu_test):
+#         print("true ////////////////////////////////////////////////?????????????????????????????????????/////////////////////////????????????????????????????????????????")
+#         # print(questionn)
+#         # print(_label)
+#         tempx=tempx+questionn
+#         tempy=tempy+_label
+#     number_of_outputs=len(tkj.search_name_lable(table_name="{}".format(table)))
+#     sp.train_TNN(table,  tempx, tempy, number_of_outputs+1)
+#     #print(table)
+#     #print(number_of_outputs)
 
 for table in tables:  
     labels=tkj.search_name_lable(table_name=table )
@@ -36,10 +36,10 @@ for table in tables:
             # print(true_label)
             # print(questionn)
             # print(_label)
-            #print(questionn)
+            # print(questionn)
             true_question=true_question+questionn
             true_label=true_label+_label
-            print("true ////////////////////////////////////////////////?????????????????????????????????????/////////////////////////????????????????????????????????????????")
+            #print("true ////////////////////////////////////////////////?????????????????????????????????????/////////////////////////????????????????????????????????????????")
   
             # print(len(true_question))
             # print(len(true_label))
@@ -48,13 +48,14 @@ for table in tables:
                 true_label[i] = 1
             
         random_label= [item for item in tkj.search_name_lable(table_name="all") if item != label ]
+        # print(random_label)
         random_choices_label = random.sample(random_label, ts.so_mau_false_x_20)
         # print(random_choices_table)
         # print(random_choices_label)
         false_question=[]
-        false_lable= [0] * (ts.so_mau_false_x_20*20)
+        false_lable= [0] * (ts.so_mau_false_x_20*50)
         for l in random_choices_label:
-           # print(l)
+            # print(l)
             temp_question , temp=tkj.search_data_question(table_name="all",lable_name =l)
             # print(temp_question)
             # print(temp)
@@ -70,7 +71,7 @@ for table in tables:
         # print(len(false_question))
         # print(len(false_lable))
         #if(table=="techniques" and label=="compensate"):
-        sp.train_TNN(table+"_"+label,true_question+false_question,true_label+false_lable , (1+1))
+        sp.train_TNNtf(table+"_"+label,true_question+false_question,true_label+false_lable , (1+1))
             
 # print(len(data_train_x[1]))
 # print(len(data_train_y[1]))

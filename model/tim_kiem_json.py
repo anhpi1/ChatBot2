@@ -110,6 +110,7 @@ def search_name_lable(table_name=None):
         for table in data:
 
             if table_name!="all":
+                
                 if table["table"]!=table_name:
                     continue
             for row in table["data"]:
