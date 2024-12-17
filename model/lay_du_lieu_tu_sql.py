@@ -72,7 +72,20 @@ def sql():
     # Ghi dữ liệu ra file JSON
     with open("model\\data\\json\\answer.json", "w", encoding="utf-8") as json_file:
         json.dump(output, json_file, ensure_ascii=False, indent=4)
-    
+    # Đường dẫn tới tệp JSON
+    file_path = 'model\\data\\json\\data_content_lable.json'
+
+    # Mở và đọc nội dung tệp JSON
+    with open(file_path, 'r', encoding='utf-8') as data_file:
+        datas = json.load(data_file)
+
+    # Xóa phần tử có "table": "answer"
+    datas = [item for item in datas if item.get("table") != "answer"]
+
+    # Ghi lại nội dung đã chỉnh sửa vào tệp JSON
+    with open(file_path, 'w', encoding='utf-8') as data_file:
+        json.dump(datas, data_file, indent=4, ensure_ascii=False)
+
 
 # Gọi hàm
 sql()

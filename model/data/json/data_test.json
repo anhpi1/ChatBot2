@@ -157,7 +157,7 @@
     },
     {
         "question": "what is noise in comparator",
-        "intent": 12,
+        "intent": 1,
         "parameter": 7,
         "structure": 12,
         "operation": 0,
@@ -241,7 +241,7 @@
     },
     {
         "question": "How many main types of comparator circuits ?",
-        "intent": 16,
+        "intent": 14,
         "parameter": 0,
         "structure": 12,
         "operation": 0,
@@ -600,8 +600,8 @@
         "simulation": 0
     },
     {
-        "question": "how many pole does two stage comparator have?",
-        "intent": 16,
+        "question": "how many pole does two stage comparator has?",
+        "intent": 14,
         "parameter": 0,
         "structure": 3,
         "operation": 0,
@@ -876,7 +876,7 @@
         "simulation": 0
     },
     {
-        "question": "what is bandwith (BW)?",
+        "question": "what is bandwidth (BW)?",
         "intent": 1,
         "parameter": 5,
         "structure": 0,
@@ -888,7 +888,7 @@
         "simulation": 0
     },
     {
-        "question": "what is gain bandwith product (GBW)",
+        "question": "what is gain-bandwdith product (GBW)",
         "intent": 1,
         "parameter": 4,
         "structure": 0,
@@ -913,7 +913,7 @@
     },
     {
         "question": "what is the structure of two stage comparator?",
-        "intent": 2,
+        "intent": 14,
         "parameter": 0,
         "structure": 3,
         "operation": 0,
@@ -924,7 +924,7 @@
         "simulation": 0
     },
     {
-        "question": "give me formula of two stage's bandwith (BW)",
+        "question": "give me formula of two stage's bandwidth (BW)",
         "intent": 4,
         "parameter": 5,
         "structure": 3,
@@ -997,7 +997,7 @@
     },
     {
         "question": "What textbooks or resources are recommended for learning about comparators?",
-        "intent": 17,
+        "intent": 16,
         "parameter": 0,
         "structure": 12,
         "operation": 0,
@@ -1261,7 +1261,7 @@
     },
     {
         "question": "between static comparator and dynamic comparator, which optimize power consumption?",
-        "intent": 4,
+        "intent": 3,
         "parameter": 18,
         "structure": 0,
         "operation": 0,
@@ -1273,7 +1273,7 @@
     },
     {
         "question": "between static comparator and dynamic comparator, which requier more complex design?",
-        "intent": 4,
+        "intent": 3,
         "parameter": 0,
         "structure": 0,
         "operation": 0,
@@ -1296,7 +1296,7 @@
         "simulation": 1
     },
     {
-        "question": "how to determine bandwith (BW) of comparator in simulation?",
+        "question": "how to determine bandwidth (BW) of comparator in simulation?",
         "intent": 2,
         "parameter": 5,
         "structure": 12,
@@ -1308,7 +1308,7 @@
         "simulation": 1
     },
     {
-        "question": "how to determine gain bandwith product (GBW) of comparator in simulation ?",
+        "question": "how to determine gain bandwidth product (GBW) of comparator in simulation ?",
         "intent": 2,
         "parameter": 4,
         "structure": 12,
@@ -1609,7 +1609,7 @@
     },
     {
         "question": "give me textbooks, resource about two stage comparator",
-        "intent": 17,
+        "intent": 16,
         "parameter": 0,
         "structure": 3,
         "operation": 0,
@@ -1621,7 +1621,7 @@
     },
     {
         "question": "how many input does comparator have?",
-        "intent": 16,
+        "intent": 14,
         "parameter": 0,
         "structure": 12,
         "operation": 0,
@@ -1632,8 +1632,8 @@
         "simulation": 0
     },
     {
-        "question": "how many ouput does comparator have?",
-        "intent": 16,
+        "question": "how many output does comparator have?",
+        "intent": 14,
         "parameter": 0,
         "structure": 12,
         "operation": 0,
@@ -1645,7 +1645,7 @@
     },
     {
         "question": "how many mosfet make up two stage comparator",
-        "intent": 16,
+        "intent": 14,
         "parameter": 0,
         "structure": 3,
         "operation": 0,
@@ -1734,6 +1734,234 @@
         "structure": 3,
         "operation": 0,
         "components": 13,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what is the disadvantages of push pull comparator",
+        "intent": 6,
+        "parameter": 0,
+        "structure": 6,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M1 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 1,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M2 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 2,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M3 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 3,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M4 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 4,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M5 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 5,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M6 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 6,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what role does M7 play in two stage comparator circuit ?",
+        "intent": 12,
+        "parameter": 0,
+        "structure": 3,
+        "operation": 0,
+        "components": 7,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "how does comparator work",
+        "intent": 9,
+        "parameter": 0,
+        "structure": 12,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "Give me bandwidth fomula two stage comparator",
+        "intent": 4,
+        "parameter": 5,
+        "structure": 3,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "how many stage does comparator have",
+        "intent": 14,
+        "parameter": 0,
+        "structure": 12,
+        "operation": 0,
+        "components": 15,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "how can i improve phase margin",
+        "intent": 7,
+        "parameter": 35,
+        "structure": 0,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "What is phase margin ?",
+        "intent": 1,
+        "parameter": 35,
+        "structure": 0,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "give me ICMR fomula",
+        "intent": 4,
+        "parameter": 21,
+        "structure": 0,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "Give me PSRR fomula",
+        "intent": 4,
+        "parameter": 22,
+        "structure": 0,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "give me CMMR fomula",
+        "intent": 4,
+        "parameter": 26,
+        "structure": 0,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "how many pole does two stage comparator have",
+        "intent": 14,
+        "parameter": 31,
+        "structure": 3,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "what is linear resistance",
+        "intent": 1,
+        "parameter": 33,
+        "structure": 0,
+        "operation": 0,
+        "components": 0,
+        "applications": 0,
+        "comparison": 0,
+        "techniques": 0,
+        "simulation": 0
+    },
+    {
+        "question": "Does the output of the comparator circuit have noise ?",
+        "intent": 8,
+        "parameter": 7,
+        "structure": 12,
+        "operation": 1,
+        "components": 12,
         "applications": 0,
         "comparison": 0,
         "techniques": 0,

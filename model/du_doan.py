@@ -25,18 +25,15 @@ def du_doan_tong(input,model):
     predicted_class = np.argmax(predictions, axis=1)[0]
     return predicted_class
 
-
 def du_doan(cau_noi,models):
     predict=[]
     temp=[]
+    print (cau_noi)
     for model,name_mode in zip(models, tables):
         du_doan_temp = du_doan_tong(cau_noi,model)
         #print(tkj.search_content_lable(table_name=name_mode, id=du_doan_temp))
         #print(name_mode+"_"+tkj.search_content_lable(table_name=name_mode, id=du_doan_temp)[0])
-        # print(name_mode)
-        # print(du_doan_temp)
-        # print("t:{}".format(tkj.search_content_lable(name_mode, du_doan_temp)[0]))
-        is_true_model = sp.load_model_true_false(name_mode+"_"+tkj.search_content_lable(name_mode, du_doan_temp)[0])
+        is_true_model = sp.load_model_true_false(name_mode+"_"+tkj.search_content_lable(table_name=name_mode, id=du_doan_temp)[0])
         temp.append(du_doan_temp)
         if(du_doan_tong(cau_noi,is_true_model)):
             #print (du_doan_temp)
@@ -45,6 +42,8 @@ def du_doan(cau_noi,models):
              #print(0)
              predict.append(0)
         del is_true_model
+    print(predict)
+    print(temp)
     return predict,temp
 #print(du_doan("what is the speed of comparator?",models))
 
@@ -55,7 +54,7 @@ def creater_report(models,name_report):
         for data in datas:
             question.append(data["question"])  
 
-    #print(question)
+    
     
 
     matrix_du_doan=[]
@@ -63,7 +62,7 @@ def creater_report(models,name_report):
     for row in question:
         du_doan_tempp,trash= du_doan(row,models)
         matrix_du_doan.append(du_doan_tempp)
-        print(du_doan_tempp)
+        #print(du_doan_tempp)
             
     matrix_du_doan_T=sp.transpose_matrix(matrix_du_doan) 
     data_file="model\\data\\json\\data_du_doan.json"
@@ -142,15 +141,14 @@ class ModelManager:
         
         self.question_last=question
         self.model_du_doan, self.model_du_doan_khong_gom_true_false = du_doan(question, models)
-        if(ts.co_gom_true_false):
-            answer = sp.replace_positive(self.model_du_doan)
-        else:
-            print(0)
-            answer = sp.replace_positive(self.model_du_doan_khong_gom_true_false) #
+        
+        answer = sp.replace_positive(self.model_du_doan)
+        
         final_answer = []
-
+        print (answer)
         # Tìm kiếm trong SQL Server
-        con = sp.search_with_conditions_sqlserver(self.model_du_doan)
+        #con = sp.search_with_conditions_sqlserver(self.model_du_doan)
+        con = [self.model_du_doan]
         if con:
             final_answer.append(con[0])
         for row in answer:
@@ -185,10 +183,10 @@ def check_model_loading(model_list):
     return failed_models
 def ghi_cau_tra_loi(i,model_manager,true):
 
-    with open('model\data\cau_tra_loi.txt','a', encoding='utf-8') as file:
+    with open('model\\data\\new model.txt','a', encoding='utf-8') as file:
         print(i)
         file.write("question:{}\n".format(i))
-        answer = model_manager.final_du_doan(i, models,true)
+        answer = model_manager.final_du_doan(i, models)
         file.write("mess: {}".format(answer))
         file.write("\n")
         file.write("\n")
@@ -228,7 +226,7 @@ for name_mode in tables:  # Đảm bảo `tables` đã được định nghĩam
 #     print(f"- {model}: {error}")
 
 
-# creater_report(models,"co_test_khong_true_false")
+creater_report(models,"new model")
 temp=None
 with open('model\\data\\json\\data_test.json', 'r', encoding='utf-8') as data_file:
     x =json.load(data_file)

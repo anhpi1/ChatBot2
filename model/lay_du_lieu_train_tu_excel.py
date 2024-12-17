@@ -20,10 +20,10 @@ def read_row(file_path, sheet_name, column, start_row, end_row):
 
 def read_file_train(file_path, sheet_name, column, start_row, end_row, output_file):    
     data_column=read_row(file_path, sheet_name, column, start_row, end_row)
-    with open('model\\data\\json\\data_column.json', 'w', encoding='utf-8') as data_file:
+    with open('model/data/json/data_column.json', 'w', encoding='utf-8') as data_file:
         json.dump(data_column, data_file, indent=4, ensure_ascii=False)
     # Ghi dữ liệu thành JSON mỗi 20 dòng
-    chunks = [data_column[i:i + 20] for i in range(0, len(data_column), 20)]
+    chunks = [data_column[i:i + 50] for i in range(0, len(data_column), 50)]
     
     #print(len(chunks))
     # chunk_lengths = [len(chunk) for chunk in chunks]
@@ -31,7 +31,7 @@ def read_file_train(file_path, sheet_name, column, start_row, end_row, output_fi
     c=0
     datas=[]
     for table in tables:
-        with open('model\\data\\json\\data_table_{}.json'.format(table), 'r', encoding='utf-8') as data_file:
+        with open('model/data/json/data_table_{}.json'.format(table), 'r', encoding='utf-8') as data_file:
             labels =json.load(data_file)
         data=[]
         for label in labels:
@@ -91,18 +91,17 @@ def read_file_test(file_path,sheet_name,start_row,end_row):
     
    
 # Gọi hàm
-file_path = "model\\data\\xlxs\\question.xlsx"  # Đường dẫn tới file Excel
+file_path = "model/data/xlxs/question (1).xlsx"  # Đường dẫn tới file Excel
 sheet_name = "train_question"  # Tên sheet
 column = "B"  # Cột cần đọc
-start_row = 3  # Hàng bắt đầu
-end_row = 1922  # Hàng kết thúc
-output_file = "model\\data\\json\\data_train.json"  # Tên file JSON đầu ra
-
+start_row = 1  # Hàng bắt đầu
+end_row = 4850  # Hàng kết thúc
+output_file = "model/data/json/data_train.json"  # Tên file JSON đầu ra
 read_file_train(file_path, sheet_name, column, start_row, end_row, output_file)
 # print(len(read_row(file_path, sheet_name, column, start_row, end_row)))
 sheet_name = "question"
 start_row = 3  # Hàng bắt đầu
-end_row = 147
+end_row = 166
 read_file_test(file_path,sheet_name,start_row,end_row)
  
  
